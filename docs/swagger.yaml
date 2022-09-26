@@ -1,0 +1,30 @@
+definitions:
+  utils.Response:
+    properties:
+      data:
+        additionalProperties: true
+        type: object
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/user/login:
+    get:
+      consumes:
+      - application/json
+      description: login
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: login api
+      tags:
+      - Auth
+swagger: "2.0"

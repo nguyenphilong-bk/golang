@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  wolffuntask:
+    image: wolffun
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mongodb
+      - mongodb2
+      - mongodb3
+    # working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app/
+    env_file:
+      - .env
+    ports:
+      - 9000:9000
+    command: ["go", "run", "main.go"]
+    # command: ["/wolffun"]
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/apps/mongo:/data/db
+      - ./scripts:/docker-entrypoint-initdb.d/
+    links:
+      - mongodb2
+      - mongodb3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: malongnhan
+      MONGO_INITDB_ROOT_PASSWORD: malongnhan
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs"]
+
+  mongodb2:
+    container_name: mongodb2
+    image: mongo:5.0
+    ports:
+      - 27018:27017
+    volumes:
+      - ~/apps/mongodb2:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  
+  mongodb3:
+    container_name: mongodb3
+    image: mongo:5.0
+    ports:
+      - 27019:27017
+    volumes:
+      - ~/apps/mongodb3:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+  
+
