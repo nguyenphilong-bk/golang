@@ -29,15 +29,16 @@ func getUserID(c *gin.Context) (userID primitive.ObjectID) {
 
 // Login ...
 
-// @Summary login api
+// @Summary Login api
 // @Schemes
-// @Description login
+// @Description Login
 // @Tags Auth
 // @Accept json
 // @Produce json
 // @Success 200 {object} utils.Response "Success"
 // @Router /v1/user/login [post]
-// @Param forms.LoginForm
+// @Param username body string true "username" SchemaExample(Subject: longn)
+// @Param password body string true "password" SchemaExample(Subject: malongnhan)
 func (ctrl UserController) Login(c *gin.Context) {
 	var loginForm forms.LoginForm
 
@@ -57,6 +58,17 @@ func (ctrl UserController) Login(c *gin.Context) {
 }
 
 // Register ...
+// @Summary Register api
+// @Schemes
+// @Description Register new user
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Success 200 {object} utils.Response "Success"
+// @Router /v1/user/register [post]
+// @Param name body string true "name" SchemaExample(Subject: long nguyen)
+// @Param username body string true "username" SchemaExample(Subject: longn)
+// @Param password body string true "password" SchemaExample(Subject: malongnhan)
 func (ctrl UserController) Register(c *gin.Context) {
 	var registerForm forms.RegisterForm
 	if validationErr := c.ShouldBindJSON(&registerForm); validationErr != nil {
@@ -83,6 +95,15 @@ func (ctrl UserController) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.Response{Status: http.StatusOK, Message: "Register new account successfully", Data: result})
 }
 
+// @Summary Top-up api
+// @Schemes
+// @Description Top-up to my account
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} utils.Response "Success"
+// @Router /v1/user/top-up [post]
+// @Param amount body int true "amount of money" SchemaExample(S/tranubject: 5000)
 func (ctrl UserController) TopUp(c *gin.Context) {
 	userID := getUserID(c)
 
@@ -108,11 +129,20 @@ func (ctrl UserController) TopUp(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.Response{Status: http.StatusOK, Message: "Top-up successfully", Data: result})
 }
 
+// @Summary Withdraw api
+// @Schemes
+// @Description Withdraw from my account
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} utils.Response "Success"
+// @Router /v1/user/withdraw [post]
+// @Param amount body int true "username of target account" SchemaExample(Subject: 5000)
 func (ctrl UserController) WithDraw(c *gin.Context) {
 	userID := getUserID(c)
 
 	var form forms.WithDrawForm
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time .Second)
 	defer cancel()
 
 	if validationErr := c.ShouldBindJSON(&form); validationErr != nil {
@@ -133,27 +163,17 @@ func (ctrl UserController) WithDraw(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.Response{Status: http.StatusOK, Message: "Withdraw successfully", Data: result})
 }
 
+// @Summary Details api
+// @Schemes
+// @Description Get details transactions from my account
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} utils.Response "Success"
+// @Router /v1/user/details [get]
 func (ctrl UserController) Details(c *gin.Context) {
 	userID := getUserID(c)
 	
-	// page, err := utils.QueryParamInt(c, "page", 1)
-	// if err != nil {
-	// 	c.AbortWithStatusJSON(http.StatusNotAcceptable, utils.Response{Status: http.StatusNotAcceptable, Message: err.Error(), Data: nil}) 
-	// 	return
-	// }
-	
-	// // limit, err := utils.QueryParamInt(c, "limit", 20)
-	// if err != nil {
-	// 	c.AbortWithStatusJSON(http.StatusNotAcceptable, utils.Response{Status: http.StatusNotAcceptable, Message: err.Error(), Data: nil}) 
-	// 	return
-	// }
-
-	// query := models.Query{
-	// 	Page: page,
-	// 	Limit: limit,
-	// 	Order: c.DefaultQuery("order", "desc"),
-	// }
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 		
@@ -173,6 +193,16 @@ func (ctrl UserController) Details(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.RetrieveResponse{Status: http.StatusOK, Message: "Retrieve user details successfully", Data: data})
 }
 
+// @Summary Transfer api
+// @Schemes
+// @Description Transfer to another account
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} utils.Response "Success"
+// @Router /v1/user/transfer [post]
+// @Param to body string true "Target account" SchemaExample(longn)
+// @Param amount body int true "Amount of money" SchemaExample(5000)
 func (ctrl UserController) Transfer(c *gin.Context) {
 	userID := getUserID(c)
 

@@ -12,11 +12,11 @@ definitions:
 info:
   contact: {}
 paths:
-  /v1/user/login:
+  /v1/user/details:
     get:
       consumes:
       - application/json
-      description: login
+      description: Get details transactions from my account
       produces:
       - application/json
       responses:
@@ -24,7 +24,147 @@ paths:
           description: Success
           schema:
             $ref: '#/definitions/utils.Response'
-      summary: login api
+      summary: Details api
+      tags:
+      - User
+  /v1/user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          example: 'Subject: longn'
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          example: 'Subject: malongnhan'
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Login api
       tags:
       - Auth
+  /v1/user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: name
+        in: body
+        name: name
+        required: true
+        schema:
+          example: 'Subject: long nguyen'
+          type: string
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          example: 'Subject: longn'
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          example: 'Subject: malongnhan'
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Register api
+      tags:
+      - Auth
+  /v1/user/top-up:
+    post:
+      consumes:
+      - application/json
+      description: Top-up to my account
+      parameters:
+      - description: amount of money
+        in: body
+        name: amount
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Top-up api
+      tags:
+      - User
+  /v1/user/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Transfer to another account
+      parameters:
+      - description: Target account
+        in: body
+        name: to
+        required: true
+        schema:
+          example: longn
+          type: string
+      - description: Amount of money
+        in: body
+        name: amount
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Transfer api
+      tags:
+      - User
+  /v1/user/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw from my account
+      parameters:
+      - description: username of target account
+        in: body
+        name: amount
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Withdraw api
+      tags:
+      - User
 swagger: "2.0"

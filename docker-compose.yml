@@ -10,15 +10,13 @@ services:
       - mongodb
       - mongodb2
       - mongodb3
-    # working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app/
     env_file:
       - .env
     ports:
       - 9000:9000
-    command: ["go", "run", "main.go"]
-    # command: ["/wolffun"]
+    command: ["/wolffun"]
 
   mongodb:
     container_name: mongodb

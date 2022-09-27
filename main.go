@@ -74,7 +74,7 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.BasePath = "/"
 	//Start the default gin server
 	r := gin.Default()
 

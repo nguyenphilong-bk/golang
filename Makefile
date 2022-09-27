@@ -4,4 +4,4 @@ init:
 down:
 	docker-compose down
 up:
-	docker-compose up -d --remove-orphans
+	docker-compose up -d --remove-orphans --force-recreate
